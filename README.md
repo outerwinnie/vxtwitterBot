@@ -15,13 +15,13 @@ The config file is structured as follows:
 
 ```json
 {
-    "DISCORD_TOKEN": "<TOKEN_HERE>",
+	"DISCORD_TOKEN": "<TOKEN_HERE>",
 	"REPLY_TO": 0, // replies to original message, off by default
 	"DELETE_OP": 1, // deletes original message
-    "PREAMBLE": "wrote:\n", // message starts with "@mention wrote:\n"
-    "MATCH1": "https://twitter.com",
+	"PREAMBLE": "wrote:\n", // message starts with "@mention wrote:\n"
+	"MATCH1": "https://twitter.com",
 	"MATCH2": "https://x.com",
-    "REPLACE": "https://vxtwitter.com"
+	"REPLACE": "https://vxtwitter.com"
 }
 
 ```
