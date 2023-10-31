@@ -2,7 +2,7 @@
 
 A Discord bot that replaces messages that contain `https://twitter.com` or `https://x.com` URLs with `https://vxtwitter.com` (https://github.com/dylanpdx/BetterTwitFix).
 
-Differences between [joaocmd/vxTwitterBot](https://github.com/joaocmd/vxTwitterBot) and this fork:
+### Differences between [joaocmd/vxTwitterBot](https://github.com/joaocmd/vxTwitterBot) and this fork:
 * Support for `https://x.com` links
 * Added config option to enable/disable deleting original message
 * Added config option to enable/disable replying to original message
