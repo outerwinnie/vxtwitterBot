@@ -1,7 +1,7 @@
 #!/bin/bash
 
-imageName=vx-twitter-bot
-containerName=vx-twitter-bot
+imageName=vxtwitterbot
+containerName=vxtwitterbot
 
 docker build -t $imageName -f Dockerfile  .
 

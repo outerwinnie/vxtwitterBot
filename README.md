@@ -1,6 +1,12 @@
-# vxTwitterBot
+# vxtwitterBot
 
-A Discord bot that replaces messages that contain `https://twitter.com` URLs with `https://vxtwitter.com` (https://github.com/dylanpdx/BetterTwitFix).
+A Discord bot that replaces messages that contain `https://twitter.com` or `https://x.com` URLs with `https://vxtwitter.com` (https://github.com/dylanpdx/BetterTwitFix).
+
+Differences between [joaocmd/vxTwitterBot](https://github.com/joaocmd/vxTwitterBot) and this fork:
+* Support for `https://x.com` links
+* Added config option to enable/disable deleting original message
+* Added config option to enable/disable replying to original message
+* Removed Twitter API GIF/video and Discord embed checks as every `https://twitter.com` or `https://x.com` embed is currently broken on Discord
 
 ## Usage
 
@@ -9,17 +15,16 @@ The config file is structured as follows:
 
 ```json
 {
-    "DISCORD_TOKEN": "<DISCORD_TOKEN_HERE>",
-    "TWITTER_BEARER_TOKEN": "<TWITTER_BEARER_TOKEN_HERE>",
+    "DISCORD_TOKEN": "<TOKEN_HERE>",
+	"REPLY_TO": 0, // replies to original message, off by default
+	"DELETE_OP": 1, // deletes original message
     "PREAMBLE": "wrote:\n", // message starts with "@mention wrote:\n"
-    "MATCH": "https://twitter.com",
+    "MATCH1": "https://twitter.com",
+	"MATCH2": "https://x.com",
     "REPLACE": "https://vxtwitter.com"
 }
-```
 
-The `TWITTER_BEARER_TOKEN` field can be left with an empty string.
-In that case, the bot uses the message embed to check if it contains a video.
-This method does not work for tweets with GIFs and does not always work because the embed might not load or might be loaded only after `on_message` is called.
+```
 
 ## Necessary bot permissions
 
