@@ -1,9 +1,0 @@
-{
-	"DISCORD_TOKEN": "<TOKEN_HERE>",
-	"REPLY_TO": 0,
-	"DELETE_OP": 1,
-	"PREAMBLE": "escribio:\n",
-	"MATCH1": "https://twitter.com",
-	"MATCH2": "https://x.com",
-	"REPLACE": "https://vxtwitter.com"
-}
