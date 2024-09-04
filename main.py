@@ -1,18 +1,16 @@
 import discord
-import json
+import os
 import re
 from logger import logger
 
-with open('config.json') as f:
-    config = json.load(f)
-
-DISCORD_TOKEN: str = config['DISCORD_TOKEN']
-REPLY_TO: int = config['REPLY_TO']
-DELETE_OP: int = config['DELETE_OP']
-PREAMBLE: str = config['PREAMBLE']
-MATCH1: str = config['MATCH1']
-MATCH2: str = config['MATCH2']
-REPLACE: str = config['REPLACE']
+# Load configuration from environment variables
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+REPLY_TO = int(os.getenv('REPLY_TO', 0))  # Default to 0 if not set
+DELETE_OP = int(os.getenv('DELETE_OP', 0))  # Default to 0 if not set
+PREAMBLE = os.getenv('PREAMBLE', '')
+MATCH1 = os.getenv('MATCH1', '')
+MATCH2 = os.getenv('MATCH2', '')
+REPLACE = os.getenv('REPLACE', '')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -34,7 +32,7 @@ async def on_message(message: discord.Message) -> None:
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
-            )
+        )
         if REPLY_TO == 1:
             await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
         else:
@@ -50,7 +48,7 @@ async def on_message(message: discord.Message) -> None:
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
-            )
+        )
         if REPLY_TO == 1:
             await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
         else:
