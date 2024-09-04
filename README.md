@@ -1,35 +1,43 @@
-# vxtwitterBot
+# 🎉 **vxTwitter Bot** 🤖
 
-A Discord bot that replaces messages that contain `https://twitter.com` or `https://x.com` URLs with `https://vxtwitter.com` (https://github.com/dylanpdx/BetterTwitFix).
+Welcome to the **vxTwitter Bot** project! This bot enhances your Discord server by processing messages to replace specific links. 🚀
 
-### Differences between [joaocmd/vxTwitterBot](https://github.com/joaocmd/vxTwitterBot) and this fork:
-* Support for `https://x.com` links
-* Added config option to enable/disable deleting original message
-* Added config option to enable/disable replying to original message
-* Removed Twitter API GIF/video and Discord embed checks as every `https://twitter.com` or `https://x.com` embed is currently broken on Discord
+## 🛠️ **Features**
 
-## Usage
+- **🔗 Link Replacement:** Automatically changes `twitter.com` and `x.com` links to `vxtwitter.com` in message content.
+- **🗑️ Message Deletion:** Optionally deletes the original messages after processing.
+- **🌟 Customizable:** Easily configure bot behavior using environment variables.
 
-Copy the `config-template.json` to a `config.json` and edit as necessary.
-The config file is structured as follows:
+## 🐳 **Docker Setup**
 
-```json
-{
-	"DISCORD_TOKEN": "<TOKEN_HERE>",
-	"REPLY_TO": 0, // replies to original message, off by default
-	"DELETE_OP": 1, // deletes original message
-	"PREAMBLE": "wrote:\n", // message starts with "@mention wrote:\n"
-	"MATCH1": "https://twitter.com",
-	"MATCH2": "https://x.com",
-	"REPLACE": "https://vxtwitter.com"
-}
+To run the bot using Docker, follow these steps:
 
+### 1. Build the Docker Image
+
+```bash
+docker build -t discord-bot .
 ```
 
-## Necessary bot permissions
+### 2. Run the Docker Container
 
-The following permissions are necessary to run the bot:
-* Read Messages/View Channels (Requires message content intent)
-* Send Messages
-* Manage Messages
-* Embed Links
+```bash
+docker run -d \
+  -e DISCORD_TOKEN=your_discord_token \
+  -e REPLY_TO=1 \
+  -e DELETE_OP=1 \
+  -e PREAMBLE="Some preamble text" \
+  -e MATCH1="text to match" \
+  -e MATCH2="another text to match" \
+  -e REPLACE="replacement text" \
+  discord-bot
+```
+
+## 📖 **How It Works**
+
+The bot listens to messages in your Discord server. When it detects a message containing a link to `twitter.com` or `x.com`, it replaces the link with `vxtwitter.com`. 
+
+For example:
+- `https://twitter.com/username/status/1234567890` becomes `https://vxtwitter.com/username/status/1234567890`
+- `https://x.com/username/status/1234567890` becomes `https://vxtwitter.com/username/status/1234567890`
+
+The bot can also reply to the original message with the updated content and optionally delete the original message based on your configuration.
