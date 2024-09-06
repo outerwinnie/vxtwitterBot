@@ -11,7 +11,7 @@ ENV MATCH1="https://twitter.com"
 ENV MATCH2="https://x.com"
 ENV MATCH3="https://instagram.com"
 ENV REPLACE="https://vxtwitter.com"
-ENV REPLACE="https://ddinstagram.com"
+ENV REPLACE2="https://ddinstagram.com"
 
 COPY . .
 CMD ["python", "./main.py"]
