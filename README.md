@@ -28,7 +28,9 @@ docker run -d \
   -e PREAMBLE="Some preamble text" \
   -e MATCH1="text to match" \
   -e MATCH2="another text to match" \
+  -e MATCH3="another text to match" \
   -e REPLACE="replacement text" \
+  -e REPLACE2="replacement text" \
   discord-bot
 ```
 
