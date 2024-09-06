@@ -10,8 +10,9 @@ DELETE_OP = int(os.getenv('DELETE_OP', 0))  # Default to 0 if not set
 PREAMBLE = os.getenv('PREAMBLE', '')
 MATCH1 = os.getenv('MATCH1', '')
 MATCH2 = os.getenv('MATCH2', '')
+MATCH3 = os.getenv('MATCH3', '')
 REPLACE = os.getenv('REPLACE', '')
-REPLACE2 = os.getenv('REPLACE', '')
+REPLACE2 = os.getenv('REPLACE2', '')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -61,7 +62,7 @@ async def on_message(message: discord.Message) -> None:
 
     if instagram_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH1, REPLACE2)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH3, REPLACE2)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
