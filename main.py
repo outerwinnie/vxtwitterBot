@@ -27,7 +27,8 @@ async def on_message(message: discord.Message) -> None:
     twitter_link = re.findall('https://twitter.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_link = re.findall('https://x.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     instagram_link = re.findall('https://www\.instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
-    
+    instagram_reel_link = re.findall('https://www\.instagram\.com/reel/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
+
     if twitter_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH1, REPLACE)}'
@@ -61,6 +62,22 @@ async def on_message(message: discord.Message) -> None:
             await message.delete()
 
     if instagram_link:
+        logger.info(f'{message.guild.name}: {message.author} {message.content}')
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH3, REPLACE2)}'
+        allowed_mentions = discord.AllowedMentions(
+            everyone=message.mention_everyone,
+            users=message.mentions,
+            roles=message.role_mentions
+        )
+        if REPLY_TO == 1:
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
+        else:
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions) 
+            
+        if DELETE_OP == 1:
+            await message.delete()
+
+    if instagram_reel_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH3, REPLACE2)}'
         allowed_mentions = discord.AllowedMentions(
