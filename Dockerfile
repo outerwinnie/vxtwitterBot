@@ -9,9 +9,11 @@ ENV DELETE_OP=1
 ENV PREAMBLE="escribio:\n"
 ENV MATCH1="https://twitter.com"
 ENV MATCH2="https://x.com"
-ENV MATCH3="https://instagram.com"
+ENV MATCH3="https://www.instagram.com"
+ENV MATCH4="https://www.tiktok.com"
 ENV REPLACE="https://vxtwitter.com"
 ENV REPLACE2="https://ddinstagram.com"
+ENV REPLACE3="https://vxtiktok.com"
 
 COPY . .
 CMD ["python", "./main.py"]
