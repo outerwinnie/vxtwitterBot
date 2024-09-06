@@ -11,6 +11,7 @@ PREAMBLE = os.getenv('PREAMBLE', '')
 MATCH1 = os.getenv('MATCH1', '')
 MATCH2 = os.getenv('MATCH2', '')
 REPLACE = os.getenv('REPLACE', '')
+REPLACE2 = os.getenv('REPLACE', '')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -24,6 +25,7 @@ async def on_message(message: discord.Message) -> None:
     # Only need to match once, message.content.replace replaces all
     twitter_link = re.findall('https://twitter.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_link = re.findall('https://x.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
+    instagram_link = re.findall('https://instagram.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     
     if twitter_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
@@ -44,6 +46,22 @@ async def on_message(message: discord.Message) -> None:
     if x_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH2, REPLACE)}'
+        allowed_mentions = discord.AllowedMentions(
+            everyone=message.mention_everyone,
+            users=message.mentions,
+            roles=message.role_mentions
+        )
+        if REPLY_TO == 1:
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
+        else:
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions) 
+            
+        if DELETE_OP == 1:
+            await message.delete()
+
+    if instagram_link:
+        logger.info(f'{message.guild.name}: {message.author} {message.content}')
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH1, REPLACE2)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
