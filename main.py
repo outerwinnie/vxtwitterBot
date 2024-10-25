@@ -32,7 +32,7 @@ async def on_message(message: discord.Message) -> None:
     instagram_link = re.findall('https://www\.instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
     instagram_reel_link = re.findall('https://www\.instagram\.com/reel/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
     tiktok_link = re.findall('https:\/\/www\.tiktok\.com\/@[\w\.]+\/video\/\d+', message.content)
-    tiktok_vm_link = re.findall('https:\/\/vm\.tiktok\.com\/[a-zA-Z0-9]+\/?)', message.content)
+    tiktok_vm_link = re.findall('https:\/\/vm\.tiktok\.com\/[a-zA-Z0-9]+\/', message.content)
 
     if twitter_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
