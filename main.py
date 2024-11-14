@@ -13,9 +13,11 @@ MATCH2 = os.getenv('MATCH2', '')
 MATCH3 = os.getenv('MATCH3', '')
 MATCH4 = os.getenv('MATCH4', '')
 MATCH5 = os.getenv('MATCH5', '')
+MATCH6 = os.getenv('MATCH6', '')
 REPLACE = os.getenv('REPLACE', '')
 REPLACE2 = os.getenv('REPLACE2', '')
 REPLACE3 = os.getenv('REPLACE3', '')
+REPLACE4 = os.getenv('REPLACE4', '')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -33,6 +35,7 @@ async def on_message(message: discord.Message) -> None:
     instagram_reel_link = re.findall('https://www\.instagram\.com/reel/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
     tiktok_link = re.findall('https:\/\/www\.tiktok\.com\/@[\w\.]+\/video\/\d+', message.content)
     tiktok_vm_link = re.findall('https:\/\/vm\.tiktok\.com\/[a-zA-Z0-9]+\/', message.content)
+    bluesky_link = re.findall('https:\/\/bsky\.app\/profile\/(did:plc:[a-z0-9]{12}|[a-z0-9_.]+\.bsky\.social)\/post\/[a-z0-9]+', message.content)
 
     if twitter_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
@@ -66,6 +69,22 @@ async def on_message(message: discord.Message) -> None:
         if DELETE_OP == 1:
             await message.delete()
 
+    if bluesky_link:
+        logger.info(f'{message.guild.name}: {message.author} {message.content}')
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH6, REPLACE4)}'
+        allowed_mentions = discord.AllowedMentions(
+            everyone=message.mention_everyone,
+            users=message.mentions,
+            roles=message.role_mentions
+        )
+        if REPLY_TO == 1:
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message)
+        else:
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions)
+
+        if DELETE_OP == 1:
+            await message.delete()        
+    
     if instagram_link or instagram_reel_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH3, REPLACE2)}'
