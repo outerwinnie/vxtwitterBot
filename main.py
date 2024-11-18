@@ -8,16 +8,16 @@ DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 REPLY_TO = int(os.getenv('REPLY_TO', 0))  # Default to 0 if not set
 DELETE_OP = int(os.getenv('DELETE_OP', 0))  # Default to 0 if not set
 PREAMBLE = os.getenv('PREAMBLE', '')
-MATCH1 = os.getenv('MATCH1', '')
-MATCH2 = os.getenv('MATCH2', '')
-MATCH3 = os.getenv('MATCH3', '')
-MATCH4 = os.getenv('MATCH4', '')
-MATCH5 = os.getenv('MATCH5', '')
-MATCH6 = os.getenv('MATCH6', '')
-REPLACE = os.getenv('REPLACE', '')
-REPLACE2 = os.getenv('REPLACE2', '')
-REPLACE3 = os.getenv('REPLACE3', '')
-REPLACE4 = os.getenv('REPLACE4', '')
+TWITTER_MATCH = os.getenv('TWITTER_MATCH', '')
+X_MATCH = os.getenv('X_MATCH', '')
+INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', '')
+TIKTOK_VM_MATCH = os.getenv('TIKTOK_VM_MATCH', '')
+TIKTOK_MATCH = os.getenv('TIKTOK_MATCH', '')
+BLUESKY_MATCH = os.getenv('BLUESKY_MATCH', '')
+TWITTER_REPLACE = os.getenv('TWITTER_REPLACE', '')
+INSTAGRAM_REPLACE = os.getenv('INSTAGRAM_REPLACE', '')
+TIKTOK_REPLACE = os.getenv('TIKTOK_REPLACE', '')
+BLUESKY_REPLACE = os.getenv('BLUESKY_REPLACE', '')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -40,7 +40,7 @@ async def on_message(message: discord.Message) -> None:
 
     if twitter_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH1, REPLACE)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TWITTER_MATCH, TWITTER_REPLACE)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
@@ -56,7 +56,7 @@ async def on_message(message: discord.Message) -> None:
 
     if x_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH2, REPLACE)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(X_MATCH, TWITTER_REPLACE)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
@@ -72,7 +72,7 @@ async def on_message(message: discord.Message) -> None:
 
     if bluesky_link or bluesky_plc_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH6, REPLACE4)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(BLUESKY_MATCH, BLUESKY_REPLACE)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
@@ -84,11 +84,11 @@ async def on_message(message: discord.Message) -> None:
             await message.channel.send(new_message, allowed_mentions=allowed_mentions)
 
         if DELETE_OP == 1:
-            await message.delete()        
-    
+            await message.delete()
+
     if instagram_link or instagram_reel_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH3, REPLACE2)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
@@ -104,7 +104,7 @@ async def on_message(message: discord.Message) -> None:
 
     if tiktok_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH4, REPLACE3)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TIKTOK_MATCH, TIKTOK_REPLACE)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
@@ -120,7 +120,7 @@ async def on_message(message: discord.Message) -> None:
 
     if tiktok_vm_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(MATCH5, REPLACE3)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TIKTOK_VM_MATCH, TIKTOK_REPLACE)}'
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,

@@ -7,16 +7,16 @@ ENV DISCORD_TOKEN="<TOKEN_HERE>"
 ENV REPLY_TO=0
 ENV DELETE_OP=1
 ENV PREAMBLE="escribio:\n"
-ENV MATCH1="https://twitter.com"
-ENV MATCH2="https://x.com"
-ENV MATCH3="https://www.instagram.com"
-ENV MATCH4="https://www.tiktok.com"
-ENV MATCH5="https://vm.tiktok.com"
-ENV MATCH6="https://bsky.app"
-ENV REPLACE="https://vxtwitter.com"
-ENV REPLACE2="https://ddinstagram.com"
-ENV REPLACE3="https://vxtiktok.com"
-ENV REPLACE3="https://cbsky.app"
+ENV TWITTER_MATCH="https://twitter.com"
+ENV X_MATCH="https://x.com"
+ENV INSTAGRAM_MATCH="https://www.instagram.com"
+ENV TIKTOK_MATCH="https://www.tiktok.com"
+ENV TIKTOK_VM_MATCH="https://vm.tiktok.com"
+ENV BLUESKY_MATCH="https://bsky.app"
+ENV TWITTER_REPLACE="https://vxtwitter.com"
+ENV INSTAGRAM_REPLACE="https://ddinstagram.com"
+ENV TIKTOK_REPLACE="https://vxtiktok.com"
+ENV BLUESKY_REPLACE="https://cbsky.app"
 
 COPY . .
 CMD ["python", "./main.py"]
