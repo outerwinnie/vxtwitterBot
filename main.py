@@ -36,7 +36,7 @@ async def on_message(message: discord.Message) -> None:
     tiktok_link = re.findall('https:\/\/www\.tiktok\.com\/@[\w\.]+\/video\/\d+', message.content)
     tiktok_vm_link = re.findall('https:\/\/vm\.tiktok\.com\/[a-zA-Z0-9]+\/', message.content)
     bluesky_plc_link = re.findall('https:\/\/bsky\.app\/profile\/did:plc:[a-z0-9]{24}\/post\/[a-z0-9]+', message.content)
-    bluesky_link = re.findall('https:\/\/bsky\.app\/profile\/[a-z0-9_.]+\.bsky\.social\/post\/[a-z0-9]+', message.content)
+    bluesky_link = re.findall('https:\/\/bsky\.app\/profile\/[a-zA-Z0-9.-]+\/post\/[a-zA-Z0-9]+', message.content)
 
     if twitter_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
