@@ -39,49 +39,79 @@ async def on_message(message: discord.Message) -> None:
     bluesky_link = re.findall('https:\/\/bsky\.app\/profile\/[a-zA-Z0-9.-]+\/post\/[a-zA-Z0-9]+', message.content)
 
     if twitter_link:
-                logger.info(f'{message.guild.name}: {message.author} {message.content}')
+        logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TWITTER_MATCH, TWITTER_REPLACE)}'
+        reference_message = message.reference
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
         )
-        if REPLY_TO == 1:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
+
+        if reference_message:  # Check if the message is a reply to another message
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions,
+                reference=replied_message  # Reference the original replied-to message
+            )
         else:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions) 
-            
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions
+            )
+
         if DELETE_OP == 1:
             await message.delete()
 
     if x_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(X_MATCH, TWITTER_REPLACE)}'
+        reference_message = message.reference
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
         )
-        if REPLY_TO == 1:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
+
+        if reference_message:  # Check if the message is a reply to another message
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions,
+                reference=replied_message  # Reference the original replied-to message
+            )
         else:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions) 
-            
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions
+            )
+
         if DELETE_OP == 1:
             await message.delete()
 
     if bluesky_link or bluesky_plc_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(BLUESKY_MATCH, BLUESKY_REPLACE)}'
+        reference_message = message.reference
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
         )
-        if REPLY_TO == 1:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message)
+
+        if reference_message:  # Check if the message is a reply to another message
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions,
+                reference=replied_message  # Reference the original replied-to message
+            )
         else:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions
+            )
 
         if DELETE_OP == 1:
             await message.delete()
@@ -89,47 +119,77 @@ async def on_message(message: discord.Message) -> None:
     if instagram_link or instagram_reel_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
+        reference_message = message.reference
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
         )
-        if REPLY_TO == 1:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
+
+        if reference_message:  # Check if the message is a reply to another message
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions,
+                reference=replied_message  # Reference the original replied-to message
+            )
         else:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions) 
-            
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions
+            )
+
         if DELETE_OP == 1:
             await message.delete()
 
     if tiktok_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TIKTOK_MATCH, TIKTOK_REPLACE)}'
+        reference_message = message.reference
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
         )
-        if REPLY_TO == 1:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message) 
+
+        if reference_message:  # Check if the message is a reply to another message
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions,
+                reference=replied_message  # Reference the original replied-to message
+            )
         else:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions) 
-            
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions
+            )
+
         if DELETE_OP == 1:
             await message.delete()
 
     if tiktok_vm_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TIKTOK_VM_MATCH, TIKTOK_REPLACE)}'
+        reference_message = message.reference
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
             users=message.mentions,
             roles=message.role_mentions
         )
-        if REPLY_TO == 1:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=message)
+
+        if reference_message:  # Check if the message is a reply to another message
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions,
+                reference=replied_message  # Reference the original replied-to message
+            )
         else:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions
+            )
 
         if DELETE_OP == 1:
             await message.delete()
