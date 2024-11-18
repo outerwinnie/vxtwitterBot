@@ -4,7 +4,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 ENV DISCORD_TOKEN="<TOKEN_HERE>"
-ENV REPLY_TO=0
 ENV DELETE_OP=1
 ENV PREAMBLE="escribio:\n"
 ENV TWITTER_MATCH="https://twitter.com"
