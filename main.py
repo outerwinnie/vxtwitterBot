@@ -28,15 +28,6 @@ async def on_message(message: discord.Message) -> None:
     if message.author.id == bot.user.id:
         return
 
-async def process_links(message, link_type, match_pattern, replace_pattern, replace_value):
-    logger.info(f'{message.guild.name}: {message.author} {message.content}')
-    new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(match_pattern, replace_value)}'
-    allowed_mentions = discord.AllowedMentions(
-        everyone=message.mention_everyone,
-        users=message.mentions,
-        roles=message.role_mentions
-    )
-
     # Only need to match once, message.content.replace replaces all
     twitter_link = re.findall('https://twitter.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_link = re.findall('https://x.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
