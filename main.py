@@ -30,7 +30,7 @@ async def on_message(message: discord.Message) -> None:
     # Only need to match once, message.content.replace replaces all
     twitter_link = re.findall('https://twitter.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_link = re.findall('https://x.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
-    instagram_link = re.findall('https://www\.instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
+    instagram_link = re.findall('https://(www\.)?instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
     instagram_reel_link = re.findall('https?://(www\.)?instagram\.com/reel/[a-zA-Z0-9_-]+/(\?igsh=[a-zA-Z0-9_-]+)?', message.content)
     tiktok_link = re.findall('https://www\.tiktok\.com/@[\w.]+/video/\d+', message.content)
     tiktok_vm_link = re.findall('https://vm\.tiktok\.com/[a-zA-Z0-9]+/', message.content)
