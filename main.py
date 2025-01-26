@@ -116,31 +116,31 @@ async def on_message(message: discord.Message) -> None:
         #if DELETE_OP == 1:
             #await message.delete()
 
-    if instagram_link or instagram_reel_link:
-        logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
-        reference_message = message.reference
-        allowed_mentions = discord.AllowedMentions(
-            everyone=message.mention_everyone,
-            users=message.mentions,
-            roles=message.role_mentions
-        )
+    #if instagram_link or instagram_reel_link:
+        #logger.info(f'{message.guild.name}: {message.author} {message.content}')
+        #new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
+        #reference_message = message.reference
+        #allowed_mentions = discord.AllowedMentions(
+            #everyone=message.mention_everyone,
+            #users=message.mentions,
+            #roles=message.role_mentions
+        #)
 
-        if reference_message:  # Check if the message is a reply to another message
-            replied_message = await message.channel.fetch_message(reference_message.message_id)
-            await message.channel.send(
-                new_message,
-                allowed_mentions=allowed_mentions,
-                reference=replied_message  # Reference the original replied-to message
-            )
-        else:
-            await message.channel.send(
-                new_message,
-                allowed_mentions=allowed_mentions
-            )
+        #if reference_message:  # Check if the message is a reply to another message
+            #replied_message = await message.channel.fetch_message(reference_message.message_id)
+            #await message.channel.send(
+                #new_message,
+                #allowed_mentions=allowed_mentions,
+                #reference=replied_message  # Reference the original replied-to message
+            #)
+        #else:
+            #await message.channel.send(
+                #new_message,
+                #allowed_mentions=allowed_mentions
+            #)
 
-        if DELETE_OP == 1:
-            await message.delete()
+        #if DELETE_OP == 1:
+            #await message.delete()
 
     if tiktok_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
