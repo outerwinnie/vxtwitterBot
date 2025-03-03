@@ -58,13 +58,21 @@ async def on_message(message: discord.Message) -> None:
     # Extract Twitter/X links
     twitter_links = re.findall(r'https?://(?:www\.)?(twitter|x)\.com/([a-zA-Z0-9_]+)/status/(\d+)', message.content)
 
+    # Extract Twitter/X links
+    twitter_links = re.findall(r'https?://(?:www\.)?(twitter|x)\.com/([a-zA-Z0-9_]+)/status/(\d+)', message.content)
+
     # Handle Twitter/X links
-    for _, username, tweet_id in twitter_links:
-        vxtwitter_url = f"https://vxtwitter.com/{username}/status/{tweet_id}"
+    for username, tweet_id in twitter_links:
+        vxtwitter_url = f"https://vxtwitter.com/{username}/status/{tweet_id}"  # Publicly visible link
+        xcancel_url = f"https://xcancel.com/i/web/status/{tweet_id}"  # Button redirect URL
+
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
+        # Generate the modified message
         new_message = f'{message.author.mention} {PREAMBLE}{re.sub(TWITTER_MATCH, TWITTER_REPLACE, message.content)}'
-        view = TweetButtonView(url=vxtwitter_url)
+
+        # Create the button linking to xCancel
+        view = TweetButtonView(url=xcancel_url)
 
         if reference_message:
             replied_message = await message.channel.fetch_message(reference_message.message_id)
