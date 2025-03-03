@@ -23,7 +23,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = discord.Client(intents=intents)
 
-# 🔳 Button Class for Tweets
+# Button Class for Tweets
 class TweetButtonView(discord.ui.View):
     def __init__(self, url: str):
         super().__init__()
@@ -34,7 +34,7 @@ async def on_message(message: discord.Message) -> None:
     if message.author.id == bot.user.id:
         return
 
-    # ✅ Extract social media links
+    # Extract social media links
     twitter_links = re.findall(r'https://twitter\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_links = re.findall(r'https://x\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     instagram_links = re.findall(r'https://(www\.)?instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
@@ -49,7 +49,7 @@ async def on_message(message: discord.Message) -> None:
         roles=message.role_mentions
     )
 
-    # ✅ Handle Twitter/X links with BUTTONS
+    # Handle Twitter/X links with BUTTONS
     for tweet_id in twitter_links + x_links:
         tweet_url = f"https://twitter.com/i/web/status/{tweet_id}"  # Mobile-friendly tweet link
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
@@ -68,7 +68,7 @@ async def on_message(message: discord.Message) -> None:
         if DELETE_OP == 1:
             await message.delete()
 
-    # ✅ Handle Instagram, TikTok links WITHOUT buttons
+    # Handle Instagram, TikTok links WITHOUT buttons
     async def process_social_media(match, match_str, replace_str):
         if match:
             logger.info(f'{message.guild.name}: {message.author} {message.content}')
