@@ -27,7 +27,7 @@ bot = discord.Client(intents=intents)
 class TweetButtonView(discord.ui.View):
     def __init__(self, url: str):
         super().__init__()
-        self.add_item(discord.ui.Button(label="🔗 View Tweet", url=url))  # Button linking to tweet
+        self.add_item(discord.ui.Button(label="🔗 Ver Tweet en xCancel", url=url))  # Button linking to tweet
 
 @bot.event
 async def on_message(message: discord.Message) -> None:
@@ -51,7 +51,7 @@ async def on_message(message: discord.Message) -> None:
 
     # Handle Twitter/X links with BUTTONS
     for tweet_id in twitter_links + x_links:
-        tweet_url = f"https://twitter.com/i/web/status/{tweet_id}"  # Mobile-friendly tweet link
+        tweet_url = f"https://xcancel.com/i/web/status/{tweet_id}"  # Mobile-friendly tweet link
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TWITTER_MATCH, TWITTER_REPLACE)}'
