@@ -10,12 +10,13 @@ PREAMBLE = os.getenv('PREAMBLE', '')
 TWITTER_MATCH = os.getenv('TWITTER_MATCH', '')
 X_MATCH = os.getenv('X_MATCH', '')
 INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', '')
-INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', '')
+INSTAGRAM_REEL_MATCH = os.getenv('INSTAGRAM_REEL_MATCH', '')
 TIKTOK_VM_MATCH = os.getenv('TIKTOK_VM_MATCH', '')
 TIKTOK_MATCH = os.getenv('TIKTOK_MATCH', '')
 #BLUESKY_MATCH = os.getenv('BLUESKY_MATCH', '')
 TWITTER_REPLACE = os.getenv('TWITTER_REPLACE', '')
 INSTAGRAM_REPLACE = os.getenv('INSTAGRAM_REPLACE', '')
+INSTAGRAM_REEL_REPLACE = os.getenv('INSTAGRAM_REEL_REPLACE', '')
 TIKTOK_REPLACE = os.getenv('TIKTOK_REPLACE', '')
 #BLUESKY_REPLACE = os.getenv('BLUESKY_REPLACE', '')
 
@@ -116,9 +117,35 @@ async def on_message(message: discord.Message) -> None:
         #if DELETE_OP == 1:
             #await message.delete()
 
-    if instagram_link or instagram_reel_link:
+    if instagram_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
+        reference_message = message.reference
+        allowed_mentions = discord.AllowedMentions(
+            everyone=message.mention_everyone,
+            users=message.mentions,
+            roles=message.role_mentions
+        )
+
+        if reference_message:  # Check if the message is a reply to another message
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions,
+                reference=replied_message  # Reference the original replied-to message
+            )
+        else:
+            await message.channel.send(
+                new_message,
+                allowed_mentions=allowed_mentions
+            )
+
+        if DELETE_OP == 1:
+            await message.delete()
+
+        if instagram_reel_link:
+        logger.info(f'{message.guild.name}: {message.author} {message.content}')
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_REEL_MATCH, INSTAGRAM_REEL_REPLACE)}'
         reference_message = message.reference
         allowed_mentions = discord.AllowedMentions(
             everyone=message.mention_everyone,
