@@ -143,7 +143,7 @@ async def on_message(message: discord.Message) -> None:
         if DELETE_OP == 1:
             await message.delete()
 
-        if instagram_reel_link:
+    if instagram_reel_link:
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_REEL_MATCH, INSTAGRAM_REEL_REPLACE)}'
         reference_message = message.reference
