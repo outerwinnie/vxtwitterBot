@@ -19,7 +19,7 @@ bot = discord.Client(intents=intents)
 class TweetButtonView(discord.ui.View):
     def __init__(self, url: str):
         super().__init__()
-        self.add_item(discord.ui.Button(label="🔗 View Tweet", url=url))
+        self.add_item(discord.ui.Button(label="🔗 Ver Tweet en XCancel", url=url))
 
 
 @bot.event
@@ -32,7 +32,7 @@ async def on_message(message: discord.Message) -> None:
 
     if twitter_match:
         tweet_id = twitter_match.group(1)
-        tweet_url = f"https://twitter.com/i/web/status/{tweet_id}"
+        tweet_url = f"https://xcancel.com/i/web/status/{tweet_id}"
 
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TWITTER_MATCH, TWITTER_REPLACE)}'
@@ -66,7 +66,7 @@ async def on_message(message: discord.Message) -> None:
 
     if x_match:
         tweet_id = x_match.group(1)
-        tweet_url = f"https://x.com/i/web/status/{tweet_id}"
+        tweet_url = f"https://xcancel.com/i/web/status/{tweet_id}"
 
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(X_MATCH, TWITTER_REPLACE)}'
