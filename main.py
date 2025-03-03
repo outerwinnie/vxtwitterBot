@@ -45,7 +45,7 @@ async def on_message(message: discord.Message) -> None:
     # Extract social media links
     twitter_links = re.findall(r'https://twitter\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_links = re.findall(r'https://x\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
-    youtube_links = re.findall(r'https://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
+    youtube_links = re.findall(r'https?:\/\/(www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
     instagram_links = re.findall(r'https://(www\.)?instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
     instagram_reel_links = re.findall(r'https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+', message.content)
     tiktok_links = re.findall(r'https://www\.tiktok\.com/(?:@[\w.]+/video/\d+|t/[a-zA-Z0-9_-]+)\/?', message.content)
@@ -82,7 +82,7 @@ async def on_message(message: discord.Message) -> None:
         youtube_url = f"https://youtube.com/watch?v={video_id}"  # Youtube link
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(YOUTUBE_MATCH, YOUTUBE_REPLACE)}'
+        new_message = f'{message.author.mention} {PREAMBLE}{re.sub(r"https?:\/\/(www\.)?youtube\.com/watch\?v=", "https://inv.nadeko.net/watch?v=", message.content)}'
         view = YouTubeButtonView(url=youtube_url)  # Attach button
 
         if reference_message:
