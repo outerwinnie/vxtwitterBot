@@ -36,7 +36,7 @@ class TweetButtonView(discord.ui.View):
 class YouTubeButtonView(discord.ui.View):
     def __init__(self, original_url: str):
         super().__init__()
-        self.add_item(discord.ui.Button(label="🎥 Watch on YouTube", url=original_url))  # Button links to YouTube
+        self.add_item(discord.ui.Button(label="🎥 Watch on YouTube", url=original_url))  # Proper YouTube link
 
 @bot.event
 async def on_message(message: discord.Message) -> None:
@@ -46,7 +46,7 @@ async def on_message(message: discord.Message) -> None:
     # Extract social media links
     twitter_links = re.findall(r'https://twitter\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_links = re.findall(r'https://x\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
-    youtube_links = re.findall(r'https?:\/\/(www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
+    youtube_links = re.findall(r'https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
     instagram_links = re.findall(r'https://(www\.)?instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
     instagram_reel_links = re.findall(r'https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+', message.content)
     tiktok_links = re.findall(r'https://www\.tiktok\.com/(?:@[\w.]+/video/\d+|t/[a-zA-Z0-9_-]+)\/?', message.content)
@@ -79,14 +79,16 @@ async def on_message(message: discord.Message) -> None:
             await message.delete()
 
     # Handle YouTube links with a button
-    youtube_links = re.findall(r'https?://(www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
+    youtube_links = re.findall(r'https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
 
-    for full_url, video_id in youtube_links:
-        invidious_url = f"https://inv.nadeko.net/watch?v={video_id}"  # Generate Invidious link
+    for video_id in youtube_links:
+        original_url = f"https://www.youtube.com/watch?v={video_id}"  # Ensure proper YouTube link
+        invidious_url = f"https://inv.nadeko.net/watch?v={video_id}"  # Invidious link
+
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(YOUTUBE_MATCH, YOUTUBE_REPLACE)}'
-        view = YouTubeButtonView(original_url=full_url)  # Button links to original YouTube video
+        view = YouTubeButtonView(original_url=original_url)  # Correct YouTube link
 
         if reference_message:
             replied_message = await message.channel.fetch_message(reference_message.message_id)
