@@ -55,17 +55,21 @@ async def on_message(message: discord.Message) -> None:
         roles=message.role_mentions
     )
 
-    # Handle Twitter/X links with button
-    for tweet_id in twitter_links + x_links:
-        tweet_url = f"https://xcancel.com/i/web/status/{tweet_id}"
+    # Extract Twitter/X links
+    twitter_links = re.findall(r'https?://(?:www\.)?(twitter|x)\.com/([a-zA-Z0-9_]+)/status/(\d+)', message.content)
+
+    # Handle Twitter/X links
+    for _, username, tweet_id in twitter_links:
+        vxtwitter_url = f"https://vxtwitter.com/{username}/status/{tweet_id}"
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TWITTER_MATCH, TWITTER_REPLACE)}'
-        view = TweetButtonView(url=tweet_url)
+        new_message = f'{message.author.mention} {PREAMBLE}{re.sub(TWITTER_MATCH, TWITTER_REPLACE, message.content)}'
+        view = TweetButtonView(url=vxtwitter_url)
 
         if reference_message:
             replied_message = await message.channel.fetch_message(reference_message.message_id)
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message, view=view)
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message,
+                                       view=view)
         else:
             await message.channel.send(new_message, allowed_mentions=allowed_mentions, view=view)
 
