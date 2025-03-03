@@ -61,8 +61,11 @@ async def on_message(message: discord.Message) -> None:
     # Extract Twitter/X links
     twitter_links = re.findall(r'https?://(?:www\.)?(twitter|x)\.com/([a-zA-Z0-9_]+)/status/(\d+)', message.content)
 
+    # Extract Twitter/X links
+    twitter_links = re.findall(r'https?://(?:www\.)?(twitter|x)\.com/([a-zA-Z0-9_]+)/status/(\d+)', message.content)
+
     # Handle Twitter/X links
-    for username, tweet_id in twitter_links:
+    for platform, username, tweet_id in twitter_links:  # Unpack correctly
         vxtwitter_url = f"https://vxtwitter.com/{username}/status/{tweet_id}"  # Publicly visible link
         xcancel_url = f"https://xcancel.com/i/web/status/{tweet_id}"  # Button redirect URL
 
