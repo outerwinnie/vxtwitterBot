@@ -82,7 +82,11 @@ async def on_message(message: discord.Message) -> None:
         youtube_url = f"https://youtube.com/watch?v={video_id}"  # Youtube link
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
-        new_message = f'{message.author.mention} {PREAMBLE}{re.sub(r"https?:\/\/(www\.)?youtube\.com/watch\?v=", "https://inv.nadeko.net/watch?v=", message.content)}'
+        new_message = f'{message.author.mention} {PREAMBLE}' + re.sub(
+            r"https?://(www\.)?youtube\.com/watch\?v=",
+            "https://inv.nadeko.net/watch?v=",
+            message.content
+        )
         view = YouTubeButtonView(url=youtube_url)  # Attach button
 
         if reference_message:
