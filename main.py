@@ -38,7 +38,7 @@ async def on_message(message: discord.Message) -> None:
     twitter_links = re.findall(r'https://twitter\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     x_links = re.findall(r'https://x\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
     instagram_links = re.findall(r'https://(www\.)?instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
-    instagram_reel_links = re.findall(r'https?://(www\.)?instagram\.com/reel/[a-zA-Z0-9_-]+/(\?igsh=[a-zA-Z0-9_-]+)?', message.content)
+    instagram_reel_links = re.findall(r'https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+', message.content)
     tiktok_links = re.findall(r'https://www\.tiktok\.com/(?:@[\w.]+/video/\d+|t/[a-zA-Z0-9_-]+)\/?', message.content)
     tiktok_vm_links = re.findall(r'https://vm\.tiktok\.com/[a-zA-Z0-9]+/', message.content)
 
