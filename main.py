@@ -13,13 +13,10 @@ INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', '')
 INSTAGRAM_REEL_MATCH = os.getenv('INSTAGRAM_REEL_MATCH', '')
 TIKTOK_VM_MATCH = os.getenv('TIKTOK_VM_MATCH', '')
 TIKTOK_MATCH = os.getenv('TIKTOK_MATCH', '')
-YOUTUBE_MATCH_1 = os.getenv('YOUTUBE_MATCH_2', '')
-YOUTUBE_MATCH_2 = os.getenv('YOUTUBE_MATCH_2', '')
 TWITTER_REPLACE = os.getenv('TWITTER_REPLACE', '')
 INSTAGRAM_REPLACE = os.getenv('INSTAGRAM_REPLACE', '')
 INSTAGRAM_REEL_REPLACE = os.getenv('INSTAGRAM_REEL_REPLACE', '')
 TIKTOK_REPLACE = os.getenv('TIKTOK_REPLACE', '')
-YOUTUBE_REPLACE = os.getenv('YOUTUBE_REPLACE', '')
 
 # Discord bot setup
 intents = discord.Intents.default()
@@ -37,14 +34,14 @@ async def on_message(message: discord.Message) -> None:
     if message.author.id == bot.user.id:
         return
 
-    # Extract social media links
-    twitter_link = re.findall(r'https://twitter\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
-    x_link = re.findall(r'https://x\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
-    instagram_link = re.findall(r'https://(www\.)?instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
-    instagram_reel_link = re.findall(r'https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+', message.content)
-    tiktok_link = re.findall(r'https://www\.tiktok\.com/(?:@[\w.]+/video/\d+|t/[a-zA-Z0-9_-]+)\/?', message.content)
-    tiktok_vm_link = re.findall(r'https://vm\.tiktok\.com/[a-zA-Z0-9]+/', message.content)
-    youtube_link = re.findall(r'https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+', message.content)
+    # Extract social media & YouTube links
+    twitter_links = re.findall(r'https://twitter\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
+    x_links = re.findall(r'https://x\.com/[a-zA-Z0-9_]*/status/([0-9]+)', message.content)
+    youtube_links = re.findall(r'https://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
+    instagram_links = re.findall(r'https://(www\.)?instagram\.com/p/[a-zA-Z0-9_-]+/?(\?[^/]+)?', message.content)
+    instagram_reel_links = re.findall(r'https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+', message.content)
+    tiktok_links = re.findall(r'https://www\.tiktok\.com/(?:@[\w.]+/video/\d+|t/[a-zA-Z0-9_-]+)\/?', message.content)
+    tiktok_vm_links = re.findall(r'https://vm\.tiktok\.com/[a-zA-Z0-9]+/', message.content)
 
     reference_message = message.reference
     allowed_mentions = discord.AllowedMentions(
@@ -54,7 +51,7 @@ async def on_message(message: discord.Message) -> None:
     )
 
     # Handle Twitter/X links with BUTTONS
-    for tweet_id in twitter_link + x_link:
+    for tweet_id in twitter_links + x_links:
         tweet_url = f"https://xcancel.com/i/web/status/{tweet_id}"  # Mobile-friendly tweet link
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
@@ -72,50 +69,21 @@ async def on_message(message: discord.Message) -> None:
         if DELETE_OP == 1:
             await message.delete()
 
-        # Handle Twitter/X links with BUTTONS
-        for tweet_id in twitter_link + x_link:
-            tweet_url = f"https://xcancel.com/i/web/status/{tweet_id}"  # Mobile-friendly tweet link
-            logger.info(f'{message.guild.name}: {message.author} {message.content}')
+    # Handle YouTube links
+    for video_id in youtube_links:
+        new_url = f"http://inv.nadeko.net/watch?v={video_id}"
+        logger.info(f'{message.guild.name}: {message.author} shared a YouTube link, replaced with {new_url}')
 
-            new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(TWITTER_MATCH, TWITTER_REPLACE)}'
-            view = TweetButtonView(url=tweet_url)  # Attach button
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace("youtube.com/watch?v=" + video_id, new_url)}'
 
-            if reference_message:
-                replied_message = await message.channel.fetch_message(reference_message.message_id)
-                await message.channel.send(
-                    new_message, allowed_mentions=allowed_mentions, reference=replied_message, view=view
-                )
-            else:
-                await message.channel.send(new_message, allowed_mentions=allowed_mentions, view=view)
+        if reference_message:
+            replied_message = await message.channel.fetch_message(reference_message.message_id)
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message)
+        else:
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions)
 
-            if DELETE_OP == 1:
-                await message.delete()
-
-        if youtube_link:
-            logger.info(f'{message.guild.name}: {message.author} {message.content}')
-            new_message = f'{message.author.mention} {PREAMBLE}{re.sub(YOUTUBE_MATCH_1 + "|" + YOUTUBE_MATCH_2, YOUTUBE_REPLACE, message.content)}'
-            reference_message = message.reference
-            allowed_mentions = discord.AllowedMentions(
-                everyone=message.mention_everyone,
-                users=message.mentions,
-                roles=message.role_mentions
-            )
-
-            if reference_message:  # Check if the message is a reply to another message
-                replied_message = await message.channel.fetch_message(reference_message.message_id)
-                await message.channel.send(
-                    new_message,
-                    allowed_mentions=allowed_mentions,
-                    reference=replied_message  # Reference the original replied-to message
-                )
-            else:
-                await message.channel.send(
-                    new_message,
-                    allowed_mentions=allowed_mentions
-                )
-
-            if DELETE_OP == 1:
-                await message.delete()
+        if DELETE_OP == 1:
+            await message.delete()
 
     # Handle Instagram, TikTok links WITHOUT buttons
     async def process_social_media(match, match_str, replace_str):
@@ -132,9 +100,9 @@ async def on_message(message: discord.Message) -> None:
             if DELETE_OP == 1:
                 await message.delete()
 
-    await process_social_media(instagram_link, INSTAGRAM_MATCH, INSTAGRAM_REPLACE)
-    await process_social_media(instagram_reel_link, INSTAGRAM_REEL_MATCH, INSTAGRAM_REEL_REPLACE)
-    await process_social_media(tiktok_link, TIKTOK_MATCH, TIKTOK_REPLACE)
-    await process_social_media(tiktok_vm_link, TIKTOK_VM_MATCH, TIKTOK_REPLACE)
+    await process_social_media(instagram_links, INSTAGRAM_MATCH, INSTAGRAM_REPLACE)
+    await process_social_media(instagram_reel_links, INSTAGRAM_REEL_MATCH, INSTAGRAM_REEL_REPLACE)
+    await process_social_media(tiktok_links, TIKTOK_MATCH, TIKTOK_REPLACE)
+    await process_social_media(tiktok_vm_links, TIKTOK_VM_MATCH, TIKTOK_REPLACE)
 
 bot.run(DISCORD_TOKEN, log_handler=None)
