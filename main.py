@@ -32,10 +32,11 @@ class TweetButtonView(discord.ui.View):
         super().__init__()
         self.add_item(discord.ui.Button(label="🔗 Ver Tweet en xCancel", url=url))  # Button linking to tweet
 
+# Button Class for YouTube
 class YouTubeButtonView(discord.ui.View):
-    def __init__(self, url: str):
+    def __init__(self, original_url: str):
         super().__init__()
-        self.add_item(discord.ui.Button(label="▶ Watch on Youtube", url=url))  # Button linking to Invidious
+        self.add_item(discord.ui.Button(label="🎥 Watch on YouTube", url=original_url))  # Button links to YouTube
 
 @bot.event
 async def on_message(message: discord.Message) -> None:
@@ -77,17 +78,15 @@ async def on_message(message: discord.Message) -> None:
         if DELETE_OP == 1:
             await message.delete()
 
-    # Handle YouTube links with BUTTONS
-    for video_id in youtube_links:
-        youtube_url = f"https://youtube.com/watch?v={video_id}"  # Youtube link
+    # Handle YouTube links with a button
+    youtube_links = re.findall(r'https?://(www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', message.content)
+
+    for full_url, video_id in youtube_links:
+        invidious_url = f"https://inv.nadeko.net/watch?v={video_id}"  # Generate Invidious link
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
-        new_message = f'{message.author.mention} {PREAMBLE}' + re.sub(
-            r"https?://(www\.)?youtube\.com/watch\?v=",
-            "https://inv.nadeko.net/watch?v=",
-            message.content
-        )
-        view = YouTubeButtonView(url=youtube_url)  # Attach button
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(YOUTUBE_MATCH, YOUTUBE_REPLACE)}'
+        view = YouTubeButtonView(original_url=full_url)  # Button links to original YouTube video
 
         if reference_message:
             replied_message = await message.channel.fetch_message(reference_message.message_id)
