@@ -13,14 +13,13 @@ ENV INSTAGRAM_REEL_MATCH="https://www.instagram.com/reel/"
 ENV TIKTOK_MATCH="https://www.tiktok.com"
 ENV TIKTOK_VM_MATCH="https://vm.tiktok.com"
 ENV BLUESKY_MATCH="https://bsky.app"
-ENV YOUTUBE_MATCH_1="https://www.youtube.com/watch"
-ENV YOUTUBE_MATCH_2="https://youtube.com/watch"
+ENV YOUTUBE_MATCH="youtube.com/watch?v="
 ENV TWITTER_REPLACE="https://vxtwitter.com"
 ENV INSTAGRAM_REPLACE="https://ddinstagram.com"
 ENV INSTAGRAM_REEL_REPLACE="https://kkinstagram.com"
 ENV TIKTOK_REPLACE="https://vxtiktok.com"
 ENV BLUESKY_REPLACE="https://cbsky.app"
-ENV YOUTUBE_REPLACE="http://inv.nadeko.net"
+ENV YOUTUBE_REPLACE="inv.nadeko.net/watch?v="
 
 COPY . .
 CMD ["python", "./main.py"]
