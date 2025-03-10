@@ -38,10 +38,10 @@ class YouTubeButtonView(discord.ui.View):
         super().__init__()
         self.video_id = video_id
 
-    @discord.ui.button(label="▶ Ver en YouTube", style=discord.ButtonStyle.primary)
+    @discord.ui.button(label="▶ Enviar en Nadeko sin anuncios", style=discord.ButtonStyle.primary)
     async def youtube_button_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
         inv_url = f"https://inv.nadeko.net/watch?v={self.video_id}"
-        await interaction.response.send_message(f"Aquí tienes el video: {inv_url}", ephemeral=True)
+        await interaction.response.send_message(f"Aquí tienes el video sin anuncios: {inv_url}", ephemeral=True)
 
 async def process_instagram_links(message: discord.Message):
     reference_message = message.reference
@@ -106,9 +106,11 @@ async def on_message(message: discord.Message) -> None:
 
     # Handle YouTube links with button
     for video_id in youtube_links:
+        youtube_url = f"https://www.youtube.com/watch?v={video_id}"
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
-        new_message = f'{message.author.mention} {PREAMBLE}{re.sub(YOUTUBE_MATCH, YOUTUBE_REPLACE, message.content)}'
-        view = YouTubeButtonView(video_id)  # Pass video_id instead of a URL
+
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content}'
+        view = YouTubeButtonView(video_id)  # Pass video_id instead of URL
 
         if reference_message:
             replied_message = await message.channel.fetch_message(reference_message.message_id)
