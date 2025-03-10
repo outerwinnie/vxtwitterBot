@@ -11,16 +11,16 @@ PREAMBLE = os.getenv('PREAMBLE', '')
 # Social Media Matches & Replacements
 TWITTER_MATCH = os.getenv('TWITTER_MATCH', '')
 X_MATCH = os.getenv('X_MATCH', '')
-INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', 'https://www.instagram.com')
-INSTAGRAM_REEL_MATCH = os.getenv('INSTAGRAM_REEL_MATCH', 'https://www.instagram.com/reel/')
+INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', '')
+INSTAGRAM_REEL_MATCH = os.getenv('INSTAGRAM_REEL_MATCH', '')
 TIKTOK_VM_MATCH = os.getenv('TIKTOK_VM_MATCH', '')
 TIKTOK_MATCH = os.getenv('TIKTOK_MATCH', '')
-YOUTUBE_MATCH = os.getenv('YOUTUBE_MATCH', r'https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)')
+YOUTUBE_MATCH = os.getenv('YOUTUBE_MATCH', r'')
 TWITTER_REPLACE = os.getenv('TWITTER_REPLACE', '')
-INSTAGRAM_REPLACE = os.getenv('INSTAGRAM_REPLACE', 'https://ddinstagram.com')
-INSTAGRAM_REEL_REPLACE = os.getenv('INSTAGRAM_REEL_REPLACE', 'https://kkinstagram.com')
+INSTAGRAM_REPLACE = os.getenv('INSTAGRAM_REPLACE', '')
+INSTAGRAM_REEL_REPLACE = os.getenv('INSTAGRAM_REEL_REPLACE', '')
 TIKTOK_REPLACE = os.getenv('TIKTOK_REPLACE', '')
-YOUTUBE_REPLACE = os.getenv('YOUTUBE_REPLACE', r'https://inv.nadeko.net/watch?v=\1')
+YOUTUBE_REPLACE = os.getenv('YOUTUBE_REPLACE', '')
 
 # Discord bot setup
 intents = discord.Intents.default()
@@ -34,9 +34,14 @@ class TweetButtonView(discord.ui.View):
         self.add_item(discord.ui.Button(label="🔗 Ver Tweet en xCancel", url=url))
 
 class YouTubeButtonView(discord.ui.View):
-    def __init__(self, url: str):
+    def __init__(self, video_id: str):
         super().__init__()
-        self.add_item(discord.ui.Button(label="▶ Ver en YouTube", url=url))
+        self.video_id = video_id
+
+    @discord.ui.button(label="▶ Ver en Nadeko", style=discord.ButtonStyle.primary)
+    async def youtube_button_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
+        inv_url = f"https://inv.nadeko.net/watch?v={self.video_id}"
+        await interaction.response.send_message(f"Aquí tienes el video sin anuncios: {inv_url}", ephemeral=True)
 
 async def process_instagram_links(message: discord.Message):
     reference_message = message.reference
@@ -102,15 +107,15 @@ async def on_message(message: discord.Message) -> None:
     # Handle YouTube links with button
     for video_id in youtube_links:
         youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-        inv_url = f"https://inv.nadeko.net/watch?v={video_id}"
         logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
-        new_message = f'{message.author.mention} {PREAMBLE}{re.sub(YOUTUBE_MATCH, YOUTUBE_REPLACE, message.content)}'
-        view = YouTubeButtonView(url=youtube_url)
+        new_message = f'{message.author.mention} {PREAMBLE}{message.content}'
+        view = YouTubeButtonView(video_id)  # Pass video_id instead of URL
 
         if reference_message:
             replied_message = await message.channel.fetch_message(reference_message.message_id)
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message, view=view)
+            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message,
+                                       view=view)
         else:
             await message.channel.send(new_message, allowed_mentions=allowed_mentions, view=view)
 
