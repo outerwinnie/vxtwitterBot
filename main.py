@@ -38,7 +38,7 @@ class YouTubeButtonView(discord.ui.View):
         super().__init__()
         self.video_id = video_id
 
-    @discord.ui.button(label="▶ Enviar en Nadeko sin anuncios", style=discord.ButtonStyle.primary)
+    @discord.ui.button(label="▶ Ver en Nadeko", style=discord.ButtonStyle.primary)
     async def youtube_button_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
         inv_url = f"https://inv.nadeko.net/watch?v={self.video_id}"
         await interaction.response.send_message(f"Aquí tienes el video sin anuncios: {inv_url}", ephemeral=True)
