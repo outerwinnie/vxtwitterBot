@@ -115,9 +115,11 @@ async def on_message(message: discord.Message) -> None:
             logger.info(f'{message.guild.name}: {message.author} YouTube Video ID: {video_id}')
             view = YouTubeButtonView(video_id)
 
+            youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+
             if index == 0:
-                # First video: keep original message content
-                response_msg = f'{message.author.mention} {PREAMBLE}{message.content}'
+                # First video: keep original message, but show only one link
+                response_msg = f'{message.author.mention} {PREAMBLE}{youtube_url}'
                 if reference_message:
                     replied_message = await message.channel.fetch_message(reference_message.message_id)
                     await message.channel.send(response_msg, allowed_mentions=allowed_mentions,
@@ -125,12 +127,11 @@ async def on_message(message: discord.Message) -> None:
                 else:
                     await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
             else:
-                # Next videos: send separate messages with one video per message
-                youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-                response_msg = f'{message.author.mention} {PREAMBLE}🎬 Video detectado: {youtube_url}'
+                # Additional videos: separate messages
+                response_msg = f'{message.author.mention} {PREAMBLE}{youtube_url}'
                 await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
 
-        # Delete original only if configured to do so
+        # Optionally delete the original message
         if DELETE_OP == 1:
             await message.delete()
 
