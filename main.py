@@ -120,7 +120,7 @@ async def on_message(message: discord.Message) -> None:
                 cleaned_text = re.sub(YOUTUBE_MATCH, '', message.content).strip()
                 # Add the first link back
                 final_text = f'{cleaned_text}\n{youtube_url}'
-                response_msg = f'{message.author.mention} {final_text}'
+                response_msg = f'{message.author.mention} {PREAMBLE}{final_text}'
 
                 if reference_message:
                     replied_message = await message.channel.fetch_message(reference_message.message_id)
