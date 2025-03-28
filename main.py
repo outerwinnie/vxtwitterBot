@@ -111,21 +111,26 @@ async def on_message(message: discord.Message) -> None:
     unique_youtube_ids = list(dict.fromkeys(youtube_links))
 
     if unique_youtube_ids:
-        for video_id in unique_youtube_ids:
+        for index, video_id in enumerate(unique_youtube_ids):
             logger.info(f'{message.guild.name}: {message.author} YouTube Video ID: {video_id}')
-
             view = YouTubeButtonView(video_id)
-            youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-            response_msg = f'{message.author.mention} {PREAMBLE}🎬 Video detectado: {youtube_url}'
 
-            if reference_message:
-                replied_message = await message.channel.fetch_message(reference_message.message_id)
-                await message.channel.send(response_msg, allowed_mentions=allowed_mentions, reference=replied_message,
-                                           view=view)
+            if index == 0:
+                # First video: keep original message content
+                response_msg = f'{message.author.mention} {PREAMBLE}{message.content}'
+                if reference_message:
+                    replied_message = await message.channel.fetch_message(reference_message.message_id)
+                    await message.channel.send(response_msg, allowed_mentions=allowed_mentions,
+                                               reference=replied_message, view=view)
+                else:
+                    await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
             else:
+                # Next videos: send separate messages with one video per message
+                youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+                response_msg = f'{message.author.mention} {PREAMBLE}🎬 Video detectado: {youtube_url}'
                 await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
 
-        # Delete original message only if we reposted at least one video
+        # Delete original only if configured to do so
         if DELETE_OP == 1:
             await message.delete()
 
