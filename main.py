@@ -119,13 +119,16 @@ async def on_message(message: discord.Message) -> None:
                 # Remove all YouTube links from message
                 cleaned_text = re.sub(YOUTUBE_MATCH, '', message.content).strip()
 
-                # If there's text before the link, append the link after the preamble
+                # If there's text before the link, append the link after the preamble on a new line
                 if cleaned_text:
-                    final_text = f'{cleaned_text} {youtube_url}'
+                    final_text = f'{cleaned_text}\n{youtube_url}'
                 else:
                     final_text = youtube_url  # Just the link if there's no text
 
-                response_msg = f'{message.author.mention} {PREAMBLE}{final_text}'
+                # Remove newlines from the preamble to prevent extra space
+                cleaned_preamble = PREAMBLE.replace('\n', ' ')  # Replace any newline in the preamble with a space
+
+                response_msg = f'{message.author.mention} {cleaned_preamble}\n{final_text}'
 
                 if reference_message:
                     replied_message = await message.channel.fetch_message(reference_message.message_id)
@@ -135,7 +138,7 @@ async def on_message(message: discord.Message) -> None:
                     await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
             else:
                 # Separate message for each remaining link
-                response_msg = f'{message.author.mention} {PREAMBLE}{youtube_url}'
+                response_msg = f'{message.author.mention} {PREAMBLE}\n{youtube_url}'
                 await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
 
         if DELETE_OP == 1:
