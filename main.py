@@ -104,20 +104,42 @@ async def on_message(message: discord.Message) -> None:
         if DELETE_OP == 1:
             await message.delete()
 
-    # Handle YouTube links with button
-    for video_id in youtube_links:
-        youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-        logger.info(f'{message.guild.name}: {message.author} {message.content}')
+    # In the on_message function, handle the YouTube links
+    youtube_links = re.findall(YOUTUBE_MATCH, message.content)
+    unique_youtube_ids = list(dict.fromkeys(youtube_links))
 
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content}'
-        view = YouTubeButtonView(video_id)  # Pass video_id instead of URL
+    if unique_youtube_ids:
+        for index, video_id in enumerate(unique_youtube_ids):
+            logger.info(f'{message.guild.name}: {message.author} YouTube Video ID: {video_id}')
+            view = YouTubeButtonView(video_id)
+            youtube_url = f"https://www.youtube.com/watch?v={video_id}"
 
-        if reference_message:
-            replied_message = await message.channel.fetch_message(reference_message.message_id)
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message,
-                                       view=view)
-        else:
-            await message.channel.send(new_message, allowed_mentions=allowed_mentions, view=view)
+            if index == 0:
+                # Keep the original message text, but only keep the first link
+                # Remove all YouTube links from message
+                cleaned_text = re.sub(YOUTUBE_MATCH, '', message.content).strip()
+
+                # If there's text before the link, append the link after the preamble on a new line
+                if cleaned_text:
+                    final_text = f'{cleaned_text}\n{youtube_url}'
+                else:
+                    final_text = youtube_url  # Just the link if there's no text
+
+                # Remove newlines from the preamble to prevent extra space
+                cleaned_preamble = PREAMBLE.replace('\n', ' ')  # Replace any newline in the preamble with a space
+
+                response_msg = f'{message.author.mention} {cleaned_preamble}\n{final_text}'
+
+                if reference_message:
+                    replied_message = await message.channel.fetch_message(reference_message.message_id)
+                    await message.channel.send(response_msg, allowed_mentions=allowed_mentions,
+                                               reference=replied_message, view=view)
+                else:
+                    await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
+            else:
+                # Separate message for each remaining link
+                response_msg = f'{message.author.mention} {PREAMBLE}\n{youtube_url}'
+                await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
 
         if DELETE_OP == 1:
             await message.delete()
