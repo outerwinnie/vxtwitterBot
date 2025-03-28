@@ -106,20 +106,22 @@ async def on_message(message: discord.Message) -> None:
 
     # Extract all YouTube video IDs
     youtube_links = re.findall(YOUTUBE_MATCH, message.content)
-
-    # Remove duplicates while keeping order
     unique_youtube_ids = list(dict.fromkeys(youtube_links))
 
     if unique_youtube_ids:
         for index, video_id in enumerate(unique_youtube_ids):
             logger.info(f'{message.guild.name}: {message.author} YouTube Video ID: {video_id}')
             view = YouTubeButtonView(video_id)
-
             youtube_url = f"https://www.youtube.com/watch?v={video_id}"
 
             if index == 0:
-                # First video: keep original message, but show only one link
-                response_msg = f'{message.author.mention} {PREAMBLE}{youtube_url}'
+                # Keep original message text, but only keep the first link
+                # Remove all YouTube links from message
+                cleaned_text = re.sub(YOUTUBE_MATCH, '', message.content).strip()
+                # Add the first link back
+                final_text = f'{cleaned_text}\n{youtube_url}'
+                response_msg = f'{message.author.mention} {final_text}'
+
                 if reference_message:
                     replied_message = await message.channel.fetch_message(reference_message.message_id)
                     await message.channel.send(response_msg, allowed_mentions=allowed_mentions,
@@ -127,11 +129,10 @@ async def on_message(message: discord.Message) -> None:
                 else:
                     await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
             else:
-                # Additional videos: separate messages
+                # Separate message for each remaining link
                 response_msg = f'{message.author.mention} {PREAMBLE}{youtube_url}'
                 await message.channel.send(response_msg, allowed_mentions=allowed_mentions, view=view)
 
-        # Optionally delete the original message
         if DELETE_OP == 1:
             await message.delete()
 
