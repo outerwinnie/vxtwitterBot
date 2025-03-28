@@ -118,8 +118,13 @@ async def on_message(message: discord.Message) -> None:
                 # Keep original message text, but only keep the first link
                 # Remove all YouTube links from message
                 cleaned_text = re.sub(YOUTUBE_MATCH, '', message.content).strip()
-                # Add the first link back
-                final_text = f'{cleaned_text}\n{youtube_url}'
+
+                # If there's text before the link, append the link after the preamble
+                if cleaned_text:
+                    final_text = f'{cleaned_text} {youtube_url}'
+                else:
+                    final_text = youtube_url  # Just the link if there's no text
+
                 response_msg = f'{message.author.mention} {PREAMBLE}{final_text}'
 
                 if reference_message:
