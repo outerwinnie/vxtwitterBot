@@ -53,19 +53,17 @@ async def process_instagram_links(message: discord.Message):
 
     new_message = None
 
-    # Match Instagram Reels
-    reel_match = re.search(r'https?://(?:www\.)?instagram\.com/reel/([a-zA-Z0-9_-]+)/?', message.content)
-    if reel_match:
-        reel_id = reel_match.group(1)
-        new_link = f"{INSTAGRAM_REEL_REPLACE}{reel_id}/"
+    # Match full Instagram reel URL and extract the path
+    match = re.search(r'https://www\.instagram\.com(/reel/[a-zA-Z0-9_-]+)', message.content)
+    if match:
+        reel_path = match.group(1)  # This will be /reel/DGvQARyRVuP
+        new_link = f"https://www.kkinstagram.com{reel_path}/"  # Append trailing slash
         new_message = f'{message.author.mention} {PREAMBLE}{new_link}'
-
-    # Match standard Instagram posts (if needed)
     elif INSTAGRAM_MATCH in message.content:
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
 
     if not new_message:
-        return  # No matching link found
+        return
 
     logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
