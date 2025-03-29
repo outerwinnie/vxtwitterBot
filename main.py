@@ -51,13 +51,21 @@ async def process_instagram_links(message: discord.Message):
         roles=message.role_mentions
     )
 
-    # Check for Instagram Reel links first
-    if INSTAGRAM_REEL_MATCH in message.content:
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_REEL_MATCH, INSTAGRAM_REEL_REPLACE)}'
+    new_message = None
+
+    # Match Instagram Reels
+    reel_match = re.search(r'https?://(?:www\.)?instagram\.com/reel/([a-zA-Z0-9_-]+)/?', message.content)
+    if reel_match:
+        reel_id = reel_match.group(1)
+        new_link = f"{INSTAGRAM_REEL_REPLACE}{reel_id}/"
+        new_message = f'{message.author.mention} {PREAMBLE}{new_link}'
+
+    # Match standard Instagram posts (if needed)
     elif INSTAGRAM_MATCH in message.content:
         new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
-    else:
-        return  # No Instagram links found, exit function
+
+    if not new_message:
+        return  # No matching link found
 
     logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
