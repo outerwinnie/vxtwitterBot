@@ -114,8 +114,7 @@ async def on_message(message: discord.Message) -> None:
 
         #if reference_message:
             #replied_message = await message.channel.fetch_message(reference_message.message_id)
-            #await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message,
-                                       view=view)
+            #await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message, view=view)
         #else:
             #await message.channel.send(new_message, allowed_mentions=allowed_mentions, view=view)
 
