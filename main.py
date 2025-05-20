@@ -84,7 +84,7 @@ async def on_message(message: discord.Message) -> None:
 
     # Extract Twitter/X links
     twitter_links = re.findall(r'https?://(?:www\.)?(twitter|x)\.com/([a-zA-Z0-9_]+)/status/(\d+)', message.content)
-    youtube_links = re.findall(YOUTUBE_MATCH, message.content)
+    #youtube_links = re.findall(YOUTUBE_MATCH, message.content)
 
     # Handle Twitter/X links
     for platform, username, tweet_id in twitter_links:
