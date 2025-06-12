@@ -11,15 +11,15 @@ PREAMBLE = os.getenv('PREAMBLE', '')
 # Social Media Matches & Replacements
 TWITTER_MATCH = os.getenv('TWITTER_MATCH', '')
 X_MATCH = os.getenv('X_MATCH', '')
-INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', '')
-INSTAGRAM_REEL_MATCH = os.getenv('INSTAGRAM_REEL_MATCH', '')
-TIKTOK_VM_MATCH = os.getenv('TIKTOK_VM_MATCH', '')
-TIKTOK_MATCH = os.getenv('TIKTOK_MATCH', '')
+#INSTAGRAM_MATCH = os.getenv('INSTAGRAM_MATCH', '')
+#INSTAGRAM_REEL_MATCH = os.getenv('INSTAGRAM_REEL_MATCH', '')
+#TIKTOK_VM_MATCH = os.getenv('TIKTOK_VM_MATCH', '')
+#TIKTOK_MATCH = os.getenv('TIKTOK_MATCH', '')
 #YOUTUBE_MATCH = os.getenv('YOUTUBE_MATCH', r'')
 TWITTER_REPLACE = os.getenv('TWITTER_REPLACE', '')
-INSTAGRAM_REPLACE = os.getenv('INSTAGRAM_REPLACE', '')
-INSTAGRAM_REEL_REPLACE = os.getenv('INSTAGRAM_REEL_REPLACE', '')
-TIKTOK_REPLACE = os.getenv('TIKTOK_REPLACE', '')
+#INSTAGRAM_REPLACE = os.getenv('INSTAGRAM_REPLACE', '')
+#INSTAGRAM_REEL_REPLACE = os.getenv('INSTAGRAM_REEL_REPLACE', '')
+#TIKTOK_REPLACE = os.getenv('TIKTOK_REPLACE', '')
 #YOUTUBE_REPLACE = os.getenv('YOUTUBE_REPLACE', '')
 
 # Discord bot setup
@@ -43,32 +43,32 @@ class TweetButtonView(discord.ui.View):
         #inv_url = f"https://inv.nadeko.net/watch?v={self.video_id}"
         #await interaction.response.send_message(f"Aquí tienes el video sin anuncios: {inv_url}", ephemeral=True)
 
-async def process_instagram_links(message: discord.Message):
-    reference_message = message.reference
-    allowed_mentions = discord.AllowedMentions(
-        everyone=message.mention_everyone,
-        users=message.mentions,
-        roles=message.role_mentions
-    )
+#async def process_instagram_links(message: discord.Message):
+    #reference_message = message.reference
+    #allowed_mentions = discord.AllowedMentions(
+        #everyone=message.mention_everyone,
+        #users=message.mentions,
+        #roles=message.role_mentions
+    #)
 
     # Check for Instagram Reel links first
-    if INSTAGRAM_REEL_MATCH in message.content:
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_REEL_MATCH, INSTAGRAM_REEL_REPLACE)}'
-    elif INSTAGRAM_MATCH in message.content:
-        new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
-    else:
-        return  # No Instagram links found, exit function
+    #if INSTAGRAM_REEL_MATCH in message.content:
+        #new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_REEL_MATCH, INSTAGRAM_REEL_REPLACE)}'
+    #elif INSTAGRAM_MATCH in message.content:
+        #new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(INSTAGRAM_MATCH, INSTAGRAM_REPLACE)}'
+    #else:
+        #return  # No Instagram links found, exit function
 
-    logger.info(f'{message.guild.name}: {message.author} {message.content}')
+    #logger.info(f'{message.guild.name}: {message.author} {message.content}')
 
-    if reference_message:
-        replied_message = await message.channel.fetch_message(reference_message.message_id)
-        await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message)
-    else:
-        await message.channel.send(new_message, allowed_mentions=allowed_mentions)
+    #if reference_message:
+        #replied_message = await message.channel.fetch_message(reference_message.message_id)
+        #await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message)
+    #else:
 
-    if DELETE_OP == 1:
-        await message.delete()
+        #await message.channel.send(new_message, allowed_mentions=allowed_mentions)
+    #if DELETE_OP == 1:
+        #await message.delete()
 
 @bot.event
 async def on_message(message: discord.Message) -> None:
@@ -122,24 +122,24 @@ async def on_message(message: discord.Message) -> None:
             #await message.delete()
 
     # Process Instagram links
-    await process_instagram_links(message)
+    #await process_instagram_links(message)
 
     # Handle TikTok links
-    async def process_social_media(match, match_str, replace_str):
-        if match:
-            logger.info(f'{message.guild.name}: {message.author} {message.content}')
-            new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(match_str, replace_str)}'
+    #async def process_social_media(match, match_str, replace_str):
+        #if match:
+            #logger.info(f'{message.guild.name}: {message.author} {message.content}')
+            #new_message = f'{message.author.mention} {PREAMBLE}{message.content.replace(match_str, replace_str)}'
 
-            if reference_message:
-                replied_message = await message.channel.fetch_message(reference_message.message_id)
-                await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message)
-            else:
-                await message.channel.send(new_message, allowed_mentions=allowed_mentions)
+            #if reference_message:
+                #replied_message = await message.channel.fetch_message(reference_message.message_id)
+                #await message.channel.send(new_message, allowed_mentions=allowed_mentions, reference=replied_message)
+            #else:
+                #await message.channel.send(new_message, allowed_mentions=allowed_mentions)
 
-            if DELETE_OP == 1:
-                await message.delete()
+            #if DELETE_OP == 1:
+                #await message.delete()
 
-    await process_social_media(re.findall(TIKTOK_MATCH, message.content), TIKTOK_MATCH, TIKTOK_REPLACE)
-    await process_social_media(re.findall(TIKTOK_VM_MATCH, message.content), TIKTOK_VM_MATCH, TIKTOK_REPLACE)
+    #await process_social_media(re.findall(TIKTOK_MATCH, message.content), TIKTOK_MATCH, TIKTOK_REPLACE)
+    #await process_social_media(re.findall(TIKTOK_VM_MATCH, message.content), TIKTOK_VM_MATCH, TIKTOK_REPLACE)
 
 bot.run(DISCORD_TOKEN, log_handler=None)
